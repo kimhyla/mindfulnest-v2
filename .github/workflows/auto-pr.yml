@@ -1,0 +1,28 @@
+name: Automate PRs from dev → main
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch: {}
+
+jobs:
+  create_pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: dev
+
+      - name: Create or update Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 🛠️ update from dev
+          title: 'Automated PR: sync dev → main'
+          body: |
+            This PR was opened automatically by GitHub Actions  
+            Review, test, and then merge to deploy to production.
+          base: main
+          branch: dev
+          draft: false
