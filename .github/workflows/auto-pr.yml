@@ -1,23 +1,28 @@
 name: Automate PRs from dev → main
 
+permissions:
+  contents: write         # needed for checkout & pushes
+  pull-requests: write    # needed to open/update PRs
+
 on:
   push:
-    branches:
-      - dev
+    branches: [ dev ]
   workflow_dispatch: {}
 
 jobs:
   create_pr:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout dev
+        uses: actions/checkout@v3
         with:
           ref: dev
+          fetch-depth: 0
 
       - name: Create or update Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.ACTIONS_PAT }}
           commit-message: 🛠️ update from dev
           title: 'Automated PR: sync dev → main'
           body: |
