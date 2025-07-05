@@ -6,10 +6,8 @@ permissions:
 
 on:
   push:
-    branches:
-      - dev
-      - main
-  workflow_dispatch: {}   # allows you to manually trigger
+    branches: [ dev ]     # ← run this workflow whenever anyone pushes to dev
+  workflow_dispatch: {}   # ← also allow manual dispatch from the Actions tab
 
 jobs:
   create_pr:
