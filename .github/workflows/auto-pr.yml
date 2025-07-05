@@ -1,13 +1,14 @@
 name: Automate PRs from dev → main
 
 permissions:
-  contents: write         # needed for checkout & pushes
-  pull-requests: write    # needed to open/update PRs
+  contents: write       # checkout & push
+  pull-requests: write  # open/update PRs
 
 on:
   push:
-    branches: [ dev ]     # ← run this workflow whenever anyone pushes to dev
-  workflow_dispatch: {}   # ← also allow manual dispatch from the Actions tab
+    branches:
+      - dev
+  workflow_dispatch: {}
 
 jobs:
   create_pr:
