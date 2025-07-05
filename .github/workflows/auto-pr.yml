@@ -1,34 +1,38 @@
-name: Automate PRs from dev → main
-
-permissions:
-  contents: write       # checkout & push
-  pull-requests: write  # open/update PRs
+# .github/workflows/auto-pr.yml
+name: Sync dev → main via automated PR
 
 on:
   push:
     branches:
       - dev
-  workflow_dispatch: {}
+
+permissions:
+  contents: write       # for checkout & push
+  pull-requests: write  # to open/update PR
 
 jobs:
-  create_pr:
+  sync_dev_to_main:
     runs-on: ubuntu-latest
     steps:
+      # 1) checkout the exact dev tip
       - name: Checkout dev
         uses: actions/checkout@v3
         with:
           ref: dev
           fetch-depth: 0
 
-      - name: Create or update Pull Request
+      # 2) fire off a PR (or update it if it already exists)
+      - name: Create or update pull request
         uses: peter-evans/create-pull-request@v4
         with:
-          token: ${{ secrets.ACTIONS_PAT }}
-          commit-message: 🛠️ update from dev
-          title: 'Automated PR: sync dev → main'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          # commit-message here simply tags the update on dev
+          commit-message: "chore: sync dev → main"
+          title: "Automated PR: sync dev → main"
           body: |
             This PR was opened automatically by GitHub Actions  
-            Review, test, and then merge to deploy to production.
-          base: main
-          branch: dev
+            It keeps **main** up to date with **dev**.
+          base: main    # where to merge into
+          branch: dev   # head of the PR
           draft: false
+
