@@ -5,7 +5,11 @@ permissions:
   pull-requests: write    # needed to open/update PRs
 
 on:
-  workflow_dispatch: {}
+  push:
+    branches:
+      - dev
+      - main
+  workflow_dispatch: {}   # allows you to manually trigger
 
 jobs:
   create_pr:
